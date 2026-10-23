@@ -1,0 +1,117 @@
+<view class="page">
+  <view class="hero">
+    <text class="hero-title">处理看板</text>
+    <text class="hero-subtitle">校方可查看分类、优先级、处理状态，并给提交人留下处理回复。</text>
+  </view>
+
+  <view wx:if="{{!loggedIn}}" class="panel">
+    <text class="section-title">管理登录</text>
+    <view class="field">
+      <text class="label">管理密码</text>
+      <input class="input" password placeholder-class="placeholder" placeholder="请输入管理密码" value="{{password}}" bindinput="onPasswordInput" />
+      <text class="hint">密码在云函数中校验，不会在前台展示。</text>
+    </view>
+    <button class="button button-primary" disabled="{{loggingIn}}" bindtap="login">{{loggingIn ? '登录中' : '进入看板'}}</button>
+  </view>
+
+  <block wx:if="{{loggedIn}}">
+    <view class="stats-row">
+      <view class="stat-card">
+        <text class="stat-number">{{stats.total}}</text>
+        <text class="stat-label">全部</text>
+      </view>
+      <view class="stat-card">
+        <text class="stat-number">{{stats.pending}}</text>
+        <text class="stat-label">待处理</text>
+      </view>
+      <view class="stat-card">
+        <text class="stat-number">{{stats.urgent}}</text>
+        <text class="stat-label">紧急</text>
+      </view>
+    </view>
+
+    <view class="panel">
+      <text class="section-title">筛选</text>
+      <view class="field">
+        <input class="input" placeholder-class="placeholder" placeholder="搜索标题、编号、地点或联系方式" value="{{keyword}}" bindinput="onKeywordInput" />
+      </view>
+      <view class="filter-grid">
+        <picker range="{{statusOptions}}" range-key="name" value="{{statusIndex}}" bindchange="onStatusChange">
+          <view class="picker-value">{{statusOptions[statusIndex].name}}</view>
+        </picker>
+        <picker range="{{categoryOptions}}" range-key="name" value="{{categoryIndex}}" bindchange="onCategoryChange">
+          <view class="picker-value">{{categoryOptions[categoryIndex].name}}</view>
+        </picker>
+      </view>
+      <view class="button-row">
+        <button class="button button-secondary" bindtap="refresh">刷新</button>
+        <button class="button button-danger" bindtap="logout">退出</button>
+      </view>
+    </view>
+
+    <view wx:if="{{!loading && filteredItems.length === 0}}" class="panel empty">
+      <text class="empty-title">暂无匹配意见</text>
+      <text class="empty-text">可以调整筛选条件，或先在提交页新增一条意见。</text>
+    </view>
+
+    <block wx:for="{{filteredItems}}" wx:key="id">
+      <view class="record-card" data-id="{{item.id}}" bindtap="openDetail">
+        <view class="record-head">
+          <text class="record-title">{{item.title}}</text>
+          <text class="status status-{{item.status}}">{{item.statusName}}</text>
+        </view>
+        <view class="record-meta">
+          <text class="chip">{{item.serial}}</text>
+          <text class="chip">{{item.categoryName}}</text>
+          <text class="chip">{{item.urgencyName}}</text>
+          <text class="chip">{{item.roleName}}</text>
+        </view>
+        <text class="record-content">{{item.content}}</text>
+        <text class="hint">提交：{{item.createdAtText}}</text>
+      </view>
+    </block>
+  </block>
+
+  <view wx:if="{{selected}}" class="modal-mask" catchtap="closeDetail">
+    <view class="modal" catchtap="noop">
+      <scroll-view class="modal-scroll" scroll-y>
+        <view class="record-head">
+          <text class="record-title">{{selected.title}}</text>
+          <text class="status status-{{selected.status}}">{{selected.statusName}}</text>
+        </view>
+        <view class="record-meta">
+          <text class="chip">{{selected.serial}}</text>
+          <text class="chip">{{selected.categoryName}}</text>
+          <text class="chip">{{selected.urgencyName}}</text>
+          <text class="chip">{{selected.roleName}}</text>
+        </view>
+
+        <view class="divider"></view>
+        <text class="label">意见内容</text>
+        <text class="record-content">{{selected.content}}</text>
+        <text class="hint" wx:if="{{selected.location}}">相关地点：{{selected.location}}</text>
+        <text class="hint">提交时间：{{selected.createdAtText}}</text>
+        <text class="hint">提交人：{{selected.anonymous ? '匿名' : selected.name}}</text>
+        <text class="hint" wx:if="{{selected.contact}}">联系方式：{{selected.contact}}</text>
+
+        <view class="divider"></view>
+        <text class="label">处理状态</text>
+        <view class="chip-row">
+          <block wx:for="{{statusOptions}}" wx:key="id">
+            <button wx:if="{{item.id !== 'all'}}" disabled="{{updating}}" class="mini-status {{selected.status === item.id ? 'mini-status-active' : ''}}" data-status="{{item.id}}" bindtap="setStatus">{{item.name}}</button>
+          </block>
+        </view>
+
+        <view class="field">
+          <text class="label">回复内容</text>
+          <textarea class="textarea" maxlength="500" placeholder-class="placeholder" placeholder="填写给提交人的处理说明、预计完成时间或结果" value="{{replyDraft}}" bindinput="onReplyInput" />
+        </view>
+
+        <view class="button-row">
+          <button class="button button-secondary" bindtap="closeDetail">关闭</button>
+          <button class="button button-primary" disabled="{{updating}}" bindtap="saveReply">{{updating ? '保存中' : '保存回复'}}</button>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+</view>

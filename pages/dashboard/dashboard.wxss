@@ -1,0 +1,29 @@
+.filter-grid {
+  display: flex;
+  gap: 16rpx;
+  margin-top: 18rpx;
+}
+
+.filter-grid picker {
+  flex: 1;
+  min-width: 0;
+}
+
+.mini-status {
+  min-width: 136rpx;
+  height: 62rpx;
+  margin: 0;
+  padding: 0 18rpx;
+  border: 1rpx solid #d7e4df;
+  border-radius: 999rpx;
+  color: #52635f;
+  background: #f6faf8;
+  font-size: 24rpx;
+  line-height: 62rpx;
+}
+
+.mini-status-active {
+  color: #ffffff;
+  border-color: #176b5b;
+  background: #176b5b;
+}

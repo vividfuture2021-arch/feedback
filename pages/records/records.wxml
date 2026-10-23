@@ -1,0 +1,38 @@
+<view class="page">
+  <view class="hero">
+    <text class="hero-title">我的反馈</text>
+    <text class="hero-subtitle">这里展示当前微信账号提交过的意见编号、处理状态和学校回复。</text>
+  </view>
+
+  <view wx:if="{{!loading && records.length === 0}}" class="panel empty">
+    <text class="empty-title">还没有提交记录</text>
+    <text class="empty-text">提交意见后，记录会出现在这里，方便后续查看处理进度。</text>
+  </view>
+
+  <block wx:for="{{records}}" wx:key="id">
+    <view class="record-card">
+      <view class="record-head">
+        <text class="record-title">{{item.title}}</text>
+        <text class="status status-{{item.status}}">{{item.statusName}}</text>
+      </view>
+      <view class="record-meta">
+        <text class="chip">{{item.serial}}</text>
+        <text class="chip">{{item.categoryName}}</text>
+        <text class="chip">{{item.urgencyName}}</text>
+      </view>
+      <text class="record-content">{{item.content}}</text>
+      <view class="divider"></view>
+      <text class="hint">提交时间：{{item.createdAtText}}</text>
+      <text class="hint">更新时间：{{item.updatedAtText}}</text>
+      <text class="hint" wx:if="{{item.location}}">相关地点：{{item.location}}</text>
+      <view wx:if="{{item.reply || item.status === 'resolved'}}" class="reply-box">
+        <text class="reply-title">学校回复</text>
+        <text class="reply-content {{item.reply ? '' : 'reply-empty'}}">{{item.reply || '学校已标记为已回复，暂无文字回复。'}}</text>
+      </view>
+      <view class="button-row">
+        <button class="button button-secondary" data-serial="{{item.serial}}" bindtap="copySerial">复制编号</button>
+        <button class="button button-danger" data-id="{{item.id}}" bindtap="deleteRecord">删除</button>
+      </view>
+    </view>
+  </block>
+</view>

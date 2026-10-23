@@ -1,0 +1,36 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/records/records",
+    "pages/dashboard/dashboard"
+  ],
+  "window": {
+    "navigationBarTitleText": "校园意见箱",
+    "navigationBarBackgroundColor": "#176B5B",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#F5F7F6",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#63736F",
+    "selectedColor": "#176B5B",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "提交意见"
+      },
+      {
+        "pagePath": "pages/records/records",
+        "text": "我的反馈"
+      },
+      {
+        "pagePath": "pages/dashboard/dashboard",
+        "text": "处理看板"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

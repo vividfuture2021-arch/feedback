@@ -1,0 +1,97 @@
+<view class="page">
+  <view class="hero">
+    <text class="hero-title">校园意见箱</text>
+    <text class="hero-subtitle">把教学、生活、服务中的问题和建议清楚提交给学校，管理端可统一跟进处理。</text>
+  </view>
+
+  <view class="stats-row">
+    <view class="stat-card">
+      <text class="stat-number">{{stats.total}}</text>
+      <text class="stat-label">累计意见</text>
+    </view>
+    <view class="stat-card">
+      <text class="stat-number">{{stats.pending}}</text>
+      <text class="stat-label">待处理</text>
+    </view>
+    <view class="stat-card">
+      <text class="stat-number">{{stats.resolved}}</text>
+      <text class="stat-label">已回复</text>
+    </view>
+  </view>
+
+  <view class="panel">
+    <text class="section-title">意见内容</text>
+
+    <view class="field">
+      <text class="label">标题</text>
+      <input class="input" placeholder-class="placeholder" placeholder="例如：晚自习教室照明需要检修" value="{{form.title}}" data-field="title" bindinput="onInput" />
+    </view>
+
+    <view class="field">
+      <text class="label">分类</text>
+      <picker range="{{categories}}" range-key="name" value="{{categoryIndex}}" bindchange="onCategoryChange">
+        <view class="picker-value">{{categories[categoryIndex].name}}</view>
+      </picker>
+    </view>
+
+    <view class="field">
+      <text class="label">紧急程度</text>
+      <picker range="{{urgencies}}" range-key="name" value="{{urgencyIndex}}" bindchange="onUrgencyChange">
+        <view class="picker-value">{{urgencies[urgencyIndex].name}}</view>
+      </picker>
+    </view>
+
+    <view class="field">
+      <text class="label">具体说明</text>
+      <textarea class="textarea" placeholder-class="placeholder" maxlength="800" placeholder="请写清楚地点、时间、影响范围和希望的处理方式" value="{{form.content}}" data-field="content" bindinput="onInput" />
+      <text class="hint">越具体越方便学校判断责任部门和处理优先级。</text>
+    </view>
+
+    <view class="field">
+      <text class="label">相关地点</text>
+      <input class="input" placeholder-class="placeholder" placeholder="可选，如：图书馆三楼、自习室 A201" value="{{form.location}}" data-field="location" bindinput="onInput" />
+    </view>
+  </view>
+
+  <view class="panel">
+    <text class="section-title">提交人信息</text>
+
+    <view class="field">
+      <text class="label">身份</text>
+      <picker range="{{roles}}" range-key="name" value="{{roleIndex}}" bindchange="onRoleChange">
+        <view class="picker-value">{{roles[roleIndex].name}}</view>
+      </picker>
+    </view>
+
+    <view class="field inline-field">
+      <view>
+        <text class="label">匿名提交</text>
+        <text class="hint">匿名后管理端只看到身份类型和联系方式。</text>
+      </view>
+      <switch checked="{{form.anonymous}}" color="#176B5B" data-field="anonymous" bindchange="onSwitch" />
+    </view>
+
+    <view class="field" wx:if="{{!form.anonymous}}">
+      <text class="label">姓名</text>
+      <input class="input" placeholder-class="placeholder" placeholder="请填写真实姓名" value="{{form.name}}" data-field="name" bindinput="onInput" />
+    </view>
+
+    <view class="field inline-field">
+      <view>
+        <text class="label">需要回复</text>
+        <text class="hint">开启后请留下可联系信息。</text>
+      </view>
+      <switch checked="{{form.replyRequired}}" color="#176B5B" data-field="replyRequired" bindchange="onSwitch" />
+    </view>
+
+    <view class="field">
+      <text class="label">联系方式</text>
+      <input class="input" placeholder-class="placeholder" placeholder="手机号、邮箱、班级或办公室" value="{{form.contact}}" data-field="contact" bindinput="onInput" />
+    </view>
+  </view>
+
+  <view class="button-row">
+    <button class="button button-secondary" bindtap="resetForm">清空</button>
+    <button class="button button-primary" disabled="{{submitting}}" bindtap="submit">{{submitting ? '提交中' : '提交意见'}}</button>
+  </view>
+</view>
