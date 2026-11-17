@@ -10,12 +10,12 @@ App({
     }
 
     wx.cloud.init({
-      env: 'cloud1-d3gqe9h1j8d185219',
+      env: '自己的id',
       traceUser: true
     });
   },
   globalData: {
     appName: '校园意见箱',
-    cloudEnvId: 'cloud1-d3gqe9h1j8d185219'
+    cloudEnvId: '自己的id'
   }
 });
